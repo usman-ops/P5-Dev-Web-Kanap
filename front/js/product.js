@@ -3,6 +3,7 @@ const parsedUrl = new URL(window.location.href);
 const id = parsedUrl.searchParams.get('id');
 console.log(id);
 
+let cart = [];
 // Fetching product data
 fetch("http://localhost:3000/api/products/"+id)
 .then(function (res) {
@@ -18,44 +19,55 @@ fetch("http://localhost:3000/api/products/"+id)
 	document.getElementById('title').textContent = product.name;
 
 	// Inserting product description
-  document.getElementById('description').textContent = product.description;
-	// Inserting product price
-  document.getElementById('price').textContent = product.price;
-	// Inserting product image
- /****let urlimage = document.querySelector('.item__img');
-  urlimage.innerHTML += `<img src="${product.imageUrl}" alt="${product.altTxt}">`;****/
+	document.getElementById('description').textContent = product.description;
 
-  let img = document.createElement('img');
-  img.src = product.imageUrl;
-  img.alt = product.altTxt;
-  let parent = document.querySelector('.item__img');
-  parent.append(img);
+	// Inserting product price
+	document.getElementById('price').textContent = product.price;
+	// Inserting product image
+	let img = document.createElement('img');
+	img.src = product.imageUrl;
+	img.alt = product.altTxt;
+	let parent = document.querySelector('.item__img');
+	parent.append(img);
 
 	// Inserting product select / option
-	function changeColors (colors) {
-		
-		let select = document.querySelector('#colors');
-		
-		for (let i = 0; i < colors.length ; i++) {
-		  let option = document.createElement('option');
-			option.value = colors[i];
-			option.textContent = colors[i];
-			select.append(option);}
-		}
-		//addEventListener to change
-
-		document.querySelector('#quantity').addEventListener('input','modifyquantity');
-	// choicequantity
-
-	function changeQuantity() {
-		let quantity = document.querySelector('#quantity').value;
-		if (quantity != null) {
-			if (quantity < 0) document.querySelector('#quantity').value = 0 ;
-			if (quantity > 100) document.querySelector('#quantity').value = 100;
-		}
+	let select = document.querySelector('#colors');
+	for(let i = 0; i < product.colors.length ; i++) {
+		let option = document.createElement('option');
+		option.value = product.colors[i];
+		option.textContent = product.colors[i];
+		select.append(option);
 	}
-})
 
+	// Handling quantity input
+	document.querySelector('#quantity').addEventListener('input', function() {
+		let quantity = document.querySelector('#quantity').value;
+		if(quantity != null) {
+			if(quantity < 1) document.querySelector('#quantity').value = 1;
+			if(quantity > 100) document.querySelector('#quantity').value = 100;
+		}
+	});
+
+	// Handling quantity click
+	document.querySelector('#addToCart').addEventListener('click', function() {
+
+		// Getting cart from LocalStorage
+		let cart = JSON.parse(localStorage.getItem('cart')) ?? [];
+
+		// Creating cartItem
+		let cartItem = {
+			productId: id,
+			productColor: document.querySelector('#colors').value,
+			productQuantity: document.querySelector('#quantity').value
+		};
+
+		// Adding cartItem to existing cart
+		cart.push(cartItem);
+
+		// Saving updated cart into LocalStorage
+		localStorage.setItem('cart', JSON.stringify(cart));
+	});
+})
 .catch(function(err) {
 	console.log(err);
 });
