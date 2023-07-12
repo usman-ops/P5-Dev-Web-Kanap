@@ -31,7 +31,8 @@ for(let i = 0; i < cart.length; i++) {
 		// product.price
 
 		// Generating HTML from both data (cart + api)
-		document.querySelector('#cart__items').innerHTML +=
+
+		/***document.querySelector('#cart__items').innerHTML +=
 		`<article class="cart__item" value-id= ${product._id} value-color= ${cartItem.productColor}>
 			<div class="cart__item__img">
 				<img src=${product.imageUrl} alt=${product.altTxt}>
@@ -52,7 +53,50 @@ for(let i = 0; i < cart.length; i++) {
 					</div>
 				</div>
 			</div>
-		</article>`;
+		</article>`; ***/
+
+    //creating article
+const article = document.createElement("article");
+value-id = product.id;
+ value-color = product.productColor;
+let cartitem =document.getElementById("#cart__Items");
+ cartitem.append(article);
+
+ // inserting img
+ const img = document.createElement("img");
+  img.src = product.imageUrl;
+	img.alt = product.altTxt;
+let divImg = document.querySelector('.cart__item__img');
+divImg.append(img);
+
+//inserting <h2>
+let description = document.querySelector('.cart__item__content__description');
+let h2 = document.createElement("h2");
+		h2.textContent = product[i].name;
+	  description.appendChild(h2);
+
+//inserting <p>
+let p = document.createElement("p");
+		p.textContent = product[i].description;
+		description.appendChild(p);
+//inserting <p2>
+let p2 = document.createElement("p");
+		p2.textContent = product[i].price +'€';
+		description.appendChild(p2);
+//settings quantityand delete 
+let divqty =document.querySelector('.cart__item__content__settings__quantity');
+let pqty = document.createElement('p');
+pqty.textContent =  product[i].quantity;
+divqty.appendChild(pqty);
+
+let divDelete =document.querySelector('.deleteItem');
+let Pdelete = document.createElement('p');
+Pdelete.textContent=product[i].delete;
+divDelete.appendChild(Pdelete);
+//addevenlistener delete
+document.querySelector('.cart__item__content__settings__delete').addEventListener('click' ,Event=>{
+	
+})
 	})
 	.catch(function(err){
 		console.log(err);
