@@ -95,7 +95,20 @@ for(let i = 0; i < cart.length; i++) {
 			// @todo
 			// @todo
 			// @todo
-		});
+		let divtotalqty = document.querySelector('totalQuantity');
+	    let totalQty = 0;
+	    for (let i = 0; i < cartItem.length; i++) {
+		totalQty += parseInt(cartItem[i].quantity);
+		divtotalqty.textContent = parseInt(totalQty);
+		}
+			
+			let divtotalPrice = document.querySelector('totalPrice');
+	    let totalPrice = 0;
+	    for (let i = 0; i < cartItem.length; i++) {
+		totalPrice = cartItem[i].price * cartItem[i].quantity;
+		divtotalPrice.textContent = parseInt(totalPrice);
+			
+		};
 
 		// Creating div.cart__item__content__settings__delete
 		let divCartItemContentSettingsDelete = document.createElement("div");
