@@ -53,7 +53,7 @@ fetch("http://localhost:3000/api/products/"+id)
 
 		// Getting cart from LocalStorage
 		let cart = JSON.parse(localStorage.getItem('cart')) ?? [];
-
+         
 		// Creating cartItem
 		let cartItem = {
 			productId: id,
@@ -66,6 +66,9 @@ fetch("http://localhost:3000/api/products/"+id)
 
 		// Saving updated cart into LocalStorage
 		localStorage.setItem('cart', JSON.stringify(cart));
+
+		// Confirming to the customer
+		alert("Produit ajouté au panier");
 	});
 })
 .catch(function(err) {
