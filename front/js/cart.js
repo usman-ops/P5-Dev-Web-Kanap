@@ -4,7 +4,15 @@ let lsCart = localStorage.getItem("cart");
 // JSON.parse data
 let cart = JSON.parse(lsCart) ?? [];
 
-// Looping on each cartItem existing in cart
+// Looping on each cartItem existing in cart to compute total quantity
+let divTotalQty = document.getElementById('totalQuantity');
+let totalQty = 0;
+
+// Looping on each cartItem existing in cart to compute total price
+let divTotalPrice = document.getElementById('totalPrice');
+let totalPrice = 0;
+
+// Looping on each cartItem existing in cart to display products in HTML
 for(let i = 0; i < cart.length; i++) {
 	let cartItem = cart[i];
 	// Fetching data from API
@@ -17,8 +25,8 @@ for(let i = 0; i < cart.length; i++) {
 	.then(function(json) {
 		let product = json;
 
-		console.log(cartItem);
-		console.log(product);
+		//console.log(cartItem);
+		//console.log(product);
 
 		// Creating article
 		let article = document.createElement("article");
@@ -89,26 +97,22 @@ for(let i = 0; i < cart.length; i++) {
 		inputItemQuantity.setAttribute("value", cartItem.productQuantity);
 		divCartItemContentSettingsQuantity.appendChild(inputItemQuantity);
 
-		// Adding p.deleteItem 'click' detection
+		// Adding p.inputItemQuantity 'click' detection
 		inputItemQuantity.addEventListener('input', function(event) {
-			console.log('inputItemQuantity inputed');
-			// @todo
-			// @todo
-			// @todo
-		let divtotalqty = document.querySelector('totalQuantity');
-	    let totalQty = 0;
-	    for (let i = 0; i < cartItem.length; i++) {
-		totalQty += parseInt(cartItem[i].quantity);
-		divtotalqty.textContent = parseInt(totalQty);
-		}
-			
-			let divtotalPrice = document.querySelector('totalPrice');
-	    let totalPrice = 0;
-	    for (let i = 0; i < cartItem.length; i++) {
-		totalPrice = cartItem[i].price * cartItem[i].quantity;
-		divtotalPrice.textContent = parseInt(totalPrice);
-			
-		};
+			// Finding the product that need to be deleted in the localstorage / array
+			let index = cart.findIndex(item => (product._id == item.productId));
+			// If Found
+			if(index !== -1) {
+				// Updating quantity in the array item containing the product
+				// @todo
+				// @todo
+				// @todo
+			}
+			// Saving updated cart into LocalStorage
+			localStorage.setItem('cart', JSON.stringify(cart));
+			// Refreshing the webpage to display the updated cart
+			window.location.reload();
+		});
 
 		// Creating div.cart__item__content__settings__delete
 		let divCartItemContentSettingsDelete = document.createElement("div");
@@ -123,11 +127,28 @@ for(let i = 0; i < cart.length; i++) {
 
 		// Adding p.deleteItem 'click' detection
 		pDeleteItem.addEventListener('click', function(event) {
-			console.log('deleteItem clicked');
-			// @todo
-			// @todo
-			// @todo
+			// Finding the product that need to be deleted in the localstorage / array
+			let index = cart.findIndex(item => (product._id == item.productId));
+			// If Found
+			if(index !== -1) {
+				// Deleting the array item containing the product
+				cart.splice(index, 1);
+			}
+			// Saving updated cart into LocalStorage
+			localStorage.setItem('cart', JSON.stringify(cart));
+			// Refreshing the webpage to display the updated cart
+			window.location.reload();
 		});
+
+		// Looping on each cartItem existing in cart to compute total quantity
+		totalQty += parseInt(cart[i].productQuantity);
+		divTotalQty.textContent = parseInt(totalQty);
+		console.log(totalQty);
+
+		// Looping on each cartItem existing in cart to compute total price
+		totalPrice += parseInt(product.price) * parseInt(cart[i].productQuantity);
+		divTotalPrice.textContent = parseInt(totalPrice);
+		console.log(totalPrice);
 	})
 	.catch(function(err){
 		console.log(err);
