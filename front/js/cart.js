@@ -104,9 +104,7 @@ for(let i = 0; i < cart.length; i++) {
 			// If Found
 			if(index !== -1) {
 				// Updating quantity in the array item containing the product
-				// @todo
-				// @todo
-				// @todo
+				cart[index].productQuantity = Number(inputItemQuantity.value);
 			}
 			// Saving updated cart into LocalStorage
 			localStorage.setItem('cart', JSON.stringify(cart));
@@ -154,3 +152,58 @@ for(let i = 0; i < cart.length; i++) {
 		console.log(err);
 	})
 }
+
+// Detecting 'submit' event of the order form
+document.querySelector('.cart__order__form').addEventListener('submit', function(event) {
+
+	// Stopping native form submit execution
+	event.preventDefault();
+
+	// Gathering form data
+	let contact = {};
+	contact.firstname = document.getElementById('firstName').value;
+	contact.lastname = document.getElementById('lastName').value;
+	// @todo lastname, city, etc
+	console.log(contact);
+
+	// Gathering products Array
+	let productsIds = [];
+
+	// Getting cart data from LocalStorage
+	let lsCart = localStorage.getItem("cart");
+	// JSON.parse data
+	let cart = JSON.parse(lsCart) ?? [];
+	for(let i = 0; i < cart.length; i++) {
+		productsIds.push(cart[i].productId);
+	}
+	console.log(productsIds);
+
+	// Checking data integrity
+	// @todo : on verra ensemble plus tard
+
+	// Sending the data to the backend
+	fetch("http://localhost:3000/api/products/order", {
+		method: "POST",
+		body: JSON.stringify({
+			contact: contact,
+			products: productsIds,
+		}),
+		headers: {
+			Accept: "application/json",
+			"content-Type": "application/json",
+		},
+	})
+	.then(function (res) {
+		if(res.ok) {
+			return res.json();
+		}
+	})
+	.then(function(response) {
+		console.log(response);
+		// @todo : Ici on va récupérer un orderId dans response
+	})
+	.catch(function(err) {
+		console.log(err);
+	});
+
+});
