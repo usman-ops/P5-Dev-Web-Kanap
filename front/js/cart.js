@@ -160,9 +160,40 @@ document.querySelector('.cart__order__form').addEventListener('submit', function
 	event.preventDefault();
 
 	// Gathering form data
+	// @todo lastname, city, etc
 	let contact = {};
 	contact.firstname = document.getElementById('firstName').value;
 	contact.lastname = document.getElementById('lastName').value;
+	contact.address = document.getElementById('address').value;
+	contact.city = document.getElementById('city').value;
+	contact.email = document.getElementById('email').value;
+    // control firstName
+	let firstName = contact.firstName;  
+        let inputFirstName = document.querySelector("#firstName");
+        if (/^([A-Za-z\s]{3,20})?([-]{0,1})?([A-Za-z]{3,20})$/.test(firstName)) {
+            inputFirstName.style.border = "solid 2px green";
+            document.querySelector("#firstNameErrorMsg").textContent = "";
+            
+        } 
+        
+        else {
+            inputFirstName.style.border = "solid 2px red";
+            document.querySelector("#firstNameErrorMsg").textContent = " invalide";
+            
+        }
+    // control lastName
+		let lastName = contact.lastName; 
+        let inputLastName = document.querySelector("#lastName"); 
+        if (/^([A-Za-z\s]{3,20})?([-]{0,1})?([A-Za-z]{3,20})$/.test(lastName)) {
+            inputLastName.style.border = "solid 2px green";
+            document.querySelector("#lastNameErrorMsg").textContent = "";
+            
+        } 
+                
+        else {
+            inputLastName.style.border = "solid 2px red";
+            document.querySelector("#lastNameErrorMsg").textContent = "invalide";
+		}
 	// @todo lastname, city, etc
 	console.log(contact);
 
@@ -201,6 +232,8 @@ document.querySelector('.cart__order__form').addEventListener('submit', function
 	.then(function(response) {
 		console.log(response);
 		// @todo : Ici on va récupérer un orderId dans response
+		let orderId = response.orderId;
+		window.location.href = 'confirmation.html?orderId=' + orderId;
 	})
 	.catch(function(err) {
 		console.log(err);
