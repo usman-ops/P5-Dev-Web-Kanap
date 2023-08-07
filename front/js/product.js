@@ -53,7 +53,7 @@ fetch("http://localhost:3000/api/products/"+id)
 
 		// Getting cart from LocalStorage
 		let cart = JSON.parse(localStorage.getItem('cart')) ?? [];
-         
+
 		// Creating cartItem
 		let cartItem = {
 			productId: id,
@@ -72,5 +72,6 @@ fetch("http://localhost:3000/api/products/"+id)
 	});
 })
 .catch(function(err) {
+	document.querySelector(".item").textContent = "Produit introuvable";
 	console.log(err);
 });
