@@ -46,6 +46,13 @@ fetch("http://localhost:3000/api/products/"+id)
 			if(quantity < 1) document.querySelector('#quantity').value = 1;
 			if(quantity > 100) document.querySelector('#quantity').value = 100;
 		}
+		else if (quantity >101 ) {
+			document.querySelector('#quantity').addEventListener('input',function(){
+				document.querySelector('#quantity').textContent = "quantité superieure ,invalide";
+			})
+		} 
+			
+	
 	});
 
 	// Handling quantity click
@@ -68,7 +75,7 @@ fetch("http://localhost:3000/api/products/"+id)
 		localStorage.setItem('cart', JSON.stringify(cart));
 
 		// Confirming to the customer
-		alert("Produit ajouté au panier");
+		document.querySelector(".item").textContent = "Produit ajouté au panier";
 	});
 })
 .catch(function(err) {
