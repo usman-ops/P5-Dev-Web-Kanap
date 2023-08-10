@@ -1,4 +1,4 @@
-// Getting 'id' param
+//Getting 'id' param
 const parsedUrl = new URL(window.location.href);
 const id = parsedUrl.searchParams.get('id');
 console.log(id);
@@ -40,19 +40,13 @@ fetch("http://localhost:3000/api/products/"+id)
 	}
 
 	// Handling quantity input
-	document.querySelector('#quantity').addEventListener('input', function() {
+	document.querySelector('#quantity').addEventListener('change', function() {
 		let quantity = document.querySelector('#quantity').value;
 		if(quantity != null) {
+			if(quantity < 1 || quantity > 100) alert("La quantité doit être comprise entre 1 et 100");
 			if(quantity < 1) document.querySelector('#quantity').value = 1;
 			if(quantity > 100) document.querySelector('#quantity').value = 100;
 		}
-		else if (quantity >101 ) {
-			document.querySelector('#quantity').addEventListener('input',function(){
-				document.querySelector('#quantity').textContent = "quantité superieure ,invalide";
-			})
-		} 
-			
-	
 	});
 
 	// Handling quantity click
@@ -68,14 +62,27 @@ fetch("http://localhost:3000/api/products/"+id)
 			productQuantity: document.querySelector('#quantity').value
 		};
 
-		// Adding cartItem to existing cart
-		cart.push(cartItem);
+		// Checking if cartItem is OK
+		if(cartItem.productQuantity < 1 || cartItem.productQuantity > 100 || cartItem.productColor == '') {
+			alert("Veuiller vérifier votre sélection (couleur / quantité)");
+		}
+		else {
+			// Adding cartItem to existing cart
+			cart.push(cartItem);
 
-		// Saving updated cart into LocalStorage
-		localStorage.setItem('cart', JSON.stringify(cart));
+			// Saving updated cart into LocalStorage
+			localStorage.setItem('cart', JSON.stringify(cart));
 
-		// Confirming to the customer
-		document.querySelector(".item").textContent = "Produit ajouté au panier";
+			// Displaying message to customer
+			let messageDiv = document.createElement('div');
+			messageDiv.textContent = "Produit ajouté au panier";
+			messageDiv.style.textAlign = 'center';
+			messageDiv.style.margin = '20px';
+			document.querySelector('.item__content__addButton').after(messageDiv);
+			setTimeout(function() {
+				messageDiv.remove(); // will be executed in 2s (200ms)
+			}, 2000)
+		}
 	});
 })
 .catch(function(err) {
