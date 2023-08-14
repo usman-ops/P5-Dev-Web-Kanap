@@ -67,8 +67,15 @@ fetch("http://localhost:3000/api/products/"+id)
 			alert("Veuiller vérifier votre sélection (couleur / quantité)");
 		}
 		else {
-			// Adding cartItem to existing cart
-			cart.push(cartItem);
+			// Checking if product is already in the cart
+			let index = cart.findIndex(item => (cartItem.productId == item.productId && cartItem.productColor == item.productColor));
+			if(index !== -1) { // YES
+				cart[index].productQuantity = Number(cart[index].productQuantity) + Number(cartItem.productQuantity);
+			}
+			else { // NO
+				// Adding cartItem to existing cart
+				cart.push(cartItem);
+			}
 
 			// Saving updated cart into LocalStorage
 			localStorage.setItem('cart', JSON.stringify(cart));
@@ -89,3 +96,4 @@ fetch("http://localhost:3000/api/products/"+id)
 	document.querySelector(".item").textContent = "Produit introuvable";
 	console.log(err);
 });
+
